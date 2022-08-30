@@ -5,7 +5,7 @@ import geopandas as gpd
 from pprint import pprint
 import matplotlib.pyplot as plt
 
-def addEventsToMap():
+def createMap():
     """
     Plot events on a map
 
@@ -22,7 +22,15 @@ def addEventsToMap():
     ax.set_ylabel("latitude")
     return fig,ax
 
-df=pd.read_csv("TeamConflict/conflict_data_acled_2018_2021.csv")
-print(df.columns)
+if __name__=="__main__":
+    df=pd.read_csv("TeamConflict/conflict_data_acled_2018_2021.csv")
+    print(df.columns)
+    event_types=df['event_type'].unique()
 
-addEventsToMap()
+    for event in event_types:
+        fig,ax=createMap()
+        filter_event_df=df[df['event_type']==event]
+
+        filter_event_df.plot.scatter(x='longitude',y='latitude',ax=ax)
+        ax.set_title(event)
+        plt.show()
